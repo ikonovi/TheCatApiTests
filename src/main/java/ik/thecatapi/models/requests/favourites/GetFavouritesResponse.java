@@ -9,10 +9,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class FavouritesResponse extends BaseResponse {
+public class GetFavouritesResponse extends BaseResponse {
     private List<ResponseBodyFavourite> body;
 
-    public FavouritesResponse(int statusCode) {
+    public GetFavouritesResponse(int statusCode) {
         super(statusCode);
     }
 }

@@ -3,13 +3,11 @@ package ik.thecatapi.services.requests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ik.thecatapi.config.EndpointPath;
 import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
-import ik.thecatapi.models.requests.breed_search.BreedsSearchRequest;
-import ik.thecatapi.models.requests.breed_search.BreedsSearchResponse;
-import ik.thecatapi.models.requests.favourites.FavouritesRequest;
-import ik.thecatapi.models.requests.favourites.FavouritesResponse;
-import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
-import ik.thecatapi.models.requests.images_search.ImagesSearchRequest;
-import ik.thecatapi.models.requests.images_search.ImagesSearchResponse;
+import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
+import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
+import ik.thecatapi.models.requests.favourites.*;
+import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
+import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
 import ik.thecatapi.services.requests.restassured.RestAssuredHttpClient;
 import io.qameta.allure.Attachment;
@@ -30,12 +28,12 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public BreedsSearchResponse requestGetBreedsSearch(BreedsSearchRequest request) {
+    public GetBreedsSearchResponse requestGetBreedsSearch(GetBreedsSearchRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         Response restResponse = httpClient.get(EndpointPath.BREEDS_SEARCH.getUriPath(), queryParams, headers);
-        BreedsSearchResponse response = new BreedsSearchResponse(restResponse.getStatusCode());
+        GetBreedsSearchResponse response = new GetBreedsSearchResponse(restResponse.getStatusCode());
         ResponseBodyBreed[] bodyBreeds = restResponse.as(ResponseBodyBreed[].class);
         response.setBody(Arrays.asList(bodyBreeds));
         log.info("{}", response);
@@ -43,12 +41,12 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public ImagesSearchResponse requestGetImagesSearch(ImagesSearchRequest request) {
+    public GetImagesSearchResponse requestGetImagesSearch(GetImagesSearchRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         Response restResponse = httpClient.get(EndpointPath.IMAGES_SEARCH.getUriPath(), queryParams, headers);
-        ImagesSearchResponse response = new ImagesSearchResponse(restResponse.getStatusCode());
+        GetImagesSearchResponse response = new GetImagesSearchResponse(restResponse.getStatusCode());
         ResponseBodyImage[] bodyImages = restResponse.as(ResponseBodyImage[].class);
         response.setBody(Arrays.asList(bodyImages));
         log.info("{}", response);
@@ -56,14 +54,26 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public FavouritesResponse requestGetFavourites(FavouritesRequest request) {
+    public GetFavouritesResponse requestGetFavourites(GetFavouritesRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         Response restResponse = httpClient.get(EndpointPath.FAVOURITES.getUriPath(), queryParams, headers);
-        FavouritesResponse response = new FavouritesResponse(restResponse.getStatusCode());
+        GetFavouritesResponse response = new GetFavouritesResponse(restResponse.getStatusCode());
         ResponseBodyFavourite[] bodyImages = restResponse.as(ResponseBodyFavourite[].class);
         response.setBody(Arrays.asList(bodyImages));
+        log.info("{}", response);
+        return response;
+    }
+
+    @Attachment("Response Object")
+    public PostFavouritesResponse requestPostFavourites(PostFavouritesRequest request) {
+        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
+        Headers headers = new Headers(authorizationHeader);
+        PostFavouritesRequestBody body = request.getBody();
+        Response restResponse = httpClient.post(EndpointPath.FAVOURITES.getUriPath(), headers, body);
+        PostFavouritesResponse response = new PostFavouritesResponse(restResponse.getStatusCode());
+        response.setBody(restResponse.as(PostFavouritesResponseBody.class));
         log.info("{}", response);
         return response;
     }

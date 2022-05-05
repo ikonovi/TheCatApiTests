@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.images_search;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -10,6 +10,6 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class BreedsSearchRequestQueryParams {
-    private String q;
+public class GetImagesSearchRequestQueryParams {
+    private String breedId;
 }

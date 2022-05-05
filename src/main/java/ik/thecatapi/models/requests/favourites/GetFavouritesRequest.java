@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.favourites;
 
 import ik.thecatapi.models.requests.base.BaseRequest;
 import lombok.Data;
@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuperBuilder
-public class BreedsSearchRequest extends BaseRequest {
-    private BreedsSearchRequestQueryParams queryParams;
+public class GetFavouritesRequest extends BaseRequest {
+    private GetFavouritesRequestQueryParams queryParams;
 }

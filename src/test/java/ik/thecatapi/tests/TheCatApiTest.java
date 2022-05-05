@@ -1,17 +1,14 @@
 package ik.thecatapi.tests;
 
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
-import ik.thecatapi.models.requests.breed_search.BreedsSearchRequest;
-import ik.thecatapi.models.requests.breed_search.BreedsSearchRequestQueryParams;
-import ik.thecatapi.models.requests.breed_search.BreedsSearchResponse;
+import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
+import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequestQueryParams;
+import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
 import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
-import ik.thecatapi.models.requests.favourites.FavouritesRequest;
-import ik.thecatapi.models.requests.favourites.FavouritesRequestQueryParams;
-import ik.thecatapi.models.requests.favourites.FavouritesResponse;
-import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
-import ik.thecatapi.models.requests.images_search.ImagesSearchRequest;
-import ik.thecatapi.models.requests.images_search.ImagesSearchRequestQueryParams;
-import ik.thecatapi.models.requests.images_search.ImagesSearchResponse;
+import ik.thecatapi.models.requests.favourites.*;
+import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
+import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
+import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
 import ik.thecatapi.services.requests.TheCatApiRequests;
 import org.testng.Assert;
@@ -39,27 +36,27 @@ public class TheCatApiTest {
     public void testCase1() {
 
         // #1
-        BreedsSearchRequest breedsSearchRequest = BreedsSearchRequest.builder()
+        GetBreedsSearchRequest getBreedsSearchRequest = GetBreedsSearchRequest.builder()
                 .authorizationHeader(authHeader)
                 .queryParams(
-                        BreedsSearchRequestQueryParams.builder()
+                        GetBreedsSearchRequestQueryParams.builder()
                                 .q("Scottish Fold") // TODO
                                 .build())
                 .build();
-        BreedsSearchResponse breedsSearchResponse = apiRequests.requestGetBreedsSearch(breedsSearchRequest);
-        List<ResponseBodyBreed> breedsSearchResponseBody = breedsSearchResponse.getBody();
+        GetBreedsSearchResponse getBreedsSearchResponse = apiRequests.requestGetBreedsSearch(getBreedsSearchRequest);
+        List<ResponseBodyBreed> breedsSearchResponseBody = getBreedsSearchResponse.getBody();
         ResponseBodyBreed responseBodyBreed = breedsSearchResponseBody.stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Breed ID was not found."));
         String breedId = responseBodyBreed.getId();
 
         // #2
-        ImagesSearchRequest imagesSearchRequest = ImagesSearchRequest.builder()
+        GetImagesSearchRequest getImagesSearchRequest = GetImagesSearchRequest.builder()
                 .authorizationHeader(authHeader)
-                .queryParams(ImagesSearchRequestQueryParams.builder().breedId(breedId).build())
+                .queryParams(GetImagesSearchRequestQueryParams.builder().breedId(breedId).build())
                 .build();
-        ImagesSearchResponse imagesSearchResponse = apiRequests.requestGetImagesSearch(imagesSearchRequest);
-        List<ResponseBodyImage> imagesSearchResponseBody = imagesSearchResponse.getBody();
+        GetImagesSearchResponse getImagesSearchResponse = apiRequests.requestGetImagesSearch(getImagesSearchRequest);
+        List<ResponseBodyImage> imagesSearchResponseBody = getImagesSearchResponse.getBody();
         ResponseBodyImage responseBodyImage = imagesSearchResponseBody.stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Image was not found."));
@@ -69,17 +66,22 @@ public class TheCatApiTest {
         Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
 
         // #3
-
-
-        long favouriteId = 111;
+        PostFavouritesRequest postFavouritesRequest = PostFavouritesRequest.builder()
+                .authorizationHeader(authHeader)
+                .body(PostFavouritesRequestBody.builder().imageId(responseBodyImage.getId()).build())
+                .build();
+        PostFavouritesResponse postFavouritesResponse = apiRequests.requestPostFavourites(postFavouritesRequest);
+        PostFavouritesResponseBody postFavouritesResponseBody = postFavouritesResponse.getBody();
+        Assert.assertEquals(postFavouritesResponseBody.getMessage(), "SUCCESS", "добавили изображение в избранное");
+        long favouriteId = postFavouritesResponseBody.getId();
 
         // #4
-        FavouritesRequest favouritesRequest = FavouritesRequest.builder()
+        GetFavouritesRequest getFavouritesRequest = GetFavouritesRequest.builder()
                 .authorizationHeader(authHeader)
-                .queryParams(FavouritesRequestQueryParams.builder().build())
+                .queryParams(GetFavouritesRequestQueryParams.builder().build())
                 .build();
-        FavouritesResponse favouritesResponse = apiRequests.requestGetFavourites(favouritesRequest);
-        List<ResponseBodyFavourite> favouritesResponseBody = favouritesResponse.getBody();
+        GetFavouritesResponse getFavouritesResponse = apiRequests.requestGetFavourites(getFavouritesRequest);
+        List<ResponseBodyFavourite> favouritesResponseBody = getFavouritesResponse.getBody();
         ResponseBodyFavourite responseBodyFavourite = favouritesResponseBody.stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Favorite Image was not found."));

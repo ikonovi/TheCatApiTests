@@ -12,10 +12,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BreedsSearchResponse extends BaseResponse {
+public class GetBreedsSearchResponse extends BaseResponse {
     private List<ResponseBodyBreed> body;
 
-    public BreedsSearchResponse(int statusCode) {
+    public GetBreedsSearchResponse(int statusCode) {
         super(statusCode);
     }
 }

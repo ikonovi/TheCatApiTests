@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.images_search;
+package ik.thecatapi.models.requests.favourites;
 
 import ik.thecatapi.models.requests.base.BaseRequest;
 import lombok.Data;
@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuperBuilder
-public class ImagesSearchRequest extends BaseRequest {
-    private ImagesSearchRequestQueryParams queryParams;
+public class PostFavouritesRequest extends BaseRequest {
+    private PostFavouritesRequestBody body;
 }
