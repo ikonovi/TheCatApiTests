@@ -1,13 +1,19 @@
 package ik.thecatapi.tests;
 
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
-import ik.thecatapi.models.requests.breedsearch.BreedSearchRequest;
-import ik.thecatapi.models.requests.breedsearch.BreedSearchRequestQueryParams;
-import ik.thecatapi.models.requests.breedsearch.BreedSearchResponse;
+import ik.thecatapi.models.requests.breed_search.BreedsSearchRequest;
+import ik.thecatapi.models.requests.breed_search.BreedsSearchRequestQueryParams;
+import ik.thecatapi.models.requests.breed_search.BreedsSearchResponse;
 import ik.thecatapi.models.requests.ResponseBodyBreed;
+import ik.thecatapi.models.requests.images_search.ImagesSearchRequest;
+import ik.thecatapi.models.requests.images_search.ImagesSearchRequestQueryParams;
+import ik.thecatapi.models.requests.images_search.ImagesSearchResponse;
+import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
 import ik.thecatapi.services.requests.TheCatApiRequests;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 
 import java.util.List;
 
@@ -28,19 +34,36 @@ public class TheCatApiTest {
 
     @Test(description = "Задание 2 (Автоматизация API)")
     public void testCase1() {
-        BreedSearchRequest breedSearchRequest = BreedSearchRequest.builder()
+        // #1
+        BreedsSearchRequest breedsSearchRequest = BreedsSearchRequest.builder()
                 .authorizationHeader(authHeader)
                 .queryParams(
-                        BreedSearchRequestQueryParams.builder()
+                        BreedsSearchRequestQueryParams.builder()
                                 .q("Scottish Fold") // TODO
                                 .build())
                 .build();
-        BreedSearchResponse breedSearchResponse = apiRequests.requestGetBreedSearch(breedSearchRequest);
-        List<ResponseBodyBreed> breedSearchResponseBody = breedSearchResponse.getBody();
-        ResponseBodyBreed responseBodyBreed = breedSearchResponseBody.stream()
+        BreedsSearchResponse breedsSearchResponse = apiRequests.requestGetBreedsSearch(breedsSearchRequest);
+        List<ResponseBodyBreed> breedsSearchResponseBody = breedsSearchResponse.getBody();
+        ResponseBodyBreed responseBodyBreed = breedsSearchResponseBody.stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Breed ID was not found."));
+        String breedId = responseBodyBreed.getId();
 
-        System.out.println(responseBodyBreed.getId());
+        // #2
+        ImagesSearchRequest imagesSearchRequest = ImagesSearchRequest.builder()
+                .authorizationHeader(authHeader)
+                .queryParams(ImagesSearchRequestQueryParams.builder().breedId(breedId).build())
+                .build();
+        ImagesSearchResponse imagesSearchResponse = apiRequests.requestGetImagesSearch(imagesSearchRequest);
+        List<ResponseBodyImage> imagesSearchResponseBody = imagesSearchResponse.getBody();
+        ResponseBodyImage responseBodyImage = imagesSearchResponseBody.stream()
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Image was not found."));
+        ResponseBodyBreed responseBodyImageBreed = responseBodyImage.getBreeds().stream()
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
+        Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
+
+
     }
 }

@@ -3,7 +3,8 @@ package ik.thecatapi.config;
 import java.util.StringJoiner;
 
 public enum EndpointPath {
-    BREEDS_SEARCH(Constants.BREEDS_SEARCH);
+    BREEDS_SEARCH(Constants.BREEDS_SEARCH),
+    IMAGES_SEARCH(Constants.IMAGES_SEARCH);
 
     private final String uriPath;
 
@@ -20,6 +21,10 @@ public enum EndpointPath {
 
     public static class Constants {
         public static final String BREEDS_SEARCH = "breeds/search";
+        public static final String IMAGES_SEARCH = "/images/search";
+
+        private Constants() {
+        }
     }
 
     public String getUriPath() {

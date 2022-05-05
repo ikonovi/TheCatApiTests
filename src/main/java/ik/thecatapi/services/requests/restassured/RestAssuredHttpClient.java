@@ -27,5 +27,4 @@ public class RestAssuredHttpClient {
                 .when()
                     .get(uriPath);
     }
-
 }

@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breedsearch;
+package ik.thecatapi.models.requests.breed_search;
 
 import ik.thecatapi.models.requests.base.BaseResponse;
 import ik.thecatapi.models.requests.ResponseBodyBreed;
@@ -13,10 +13,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BreedSearchResponse extends BaseResponse {
+public class BreedsSearchResponse extends BaseResponse {
     private List<ResponseBodyBreed> body;
 
-    public BreedSearchResponse(int statusCode) {
+    public BreedsSearchResponse(int statusCode) {
         super(statusCode);
     }
 }
