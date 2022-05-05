@@ -1,15 +1,12 @@
 package ik.thecatapi.tests;
 
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequestQueryParams;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
 import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
-import ik.thecatapi.models.requests.favourites.*;
-import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
-import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
-import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
+import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponseBody;
+import ik.thecatapi.models.requests.favourites.PostFavouritesResponseBody;
+import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
+import ik.thecatapi.services.requests.Steps;
 import ik.thecatapi.services.requests.TheCatApiRequests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -21,6 +18,8 @@ public class TheCatApiTest {
     TheCatApiRequests apiRequests;
     AuthorizationHeader authHeader;
 
+    Steps steps;
+
     @BeforeClass
     public void setUp() {
         apiRequests = new TheCatApiRequests();
@@ -30,62 +29,27 @@ public class TheCatApiTest {
                 .name(headerName)
                 .value(API_KEY)
                 .build();
+        steps = new Steps(apiRequests, authHeader);
     }
 
     @Test(description = "Задание 2 (Автоматизация API)")
     public void testCase1() {
-
-        // Step 1.
-        GetBreedsSearchRequest getBreedsSearchRequest = GetBreedsSearchRequest.builder()
-                .authorizationHeader(authHeader)
-                .queryParams(
-                        GetBreedsSearchRequestQueryParams.builder()
-                                .q("Scottish Fold") // TODO
-                                .build())
-                .build();
-        GetBreedsSearchResponse getBreedsSearchResponse = apiRequests.requestGetBreedsSearch(getBreedsSearchRequest);
-        List<ResponseBodyBreed> breedsSearchResponseBody = getBreedsSearchResponse.getBody();
-        ResponseBodyBreed responseBodyBreed = breedsSearchResponseBody.stream()
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Breed ID was not found."));
+        ResponseBodyBreed responseBodyBreed = steps.doStep1("Scottish Fold"); // TODO: conf, testng data?
         String breedId = responseBodyBreed.getId();
 
-        // Step 2.
-        GetImagesSearchRequest getImagesSearchRequest = GetImagesSearchRequest.builder()
-                .authorizationHeader(authHeader)
-                .queryParams(GetImagesSearchRequestQueryParams.builder().breedId(breedId).build())
-                .build();
-        GetImagesSearchResponse getImagesSearchResponse = apiRequests.requestGetImagesSearch(getImagesSearchRequest);
-        List<ResponseBodyImage> imagesSearchResponseBody = getImagesSearchResponse.getBody();
-        ResponseBodyImage responseBodyImage = imagesSearchResponseBody.stream()
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Image was not found."));
+        ResponseBodyImage responseBodyImage = steps.doStep2(breedId);
         ResponseBodyBreed responseBodyImageBreed = responseBodyImage.getBreeds().stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
         Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
         String imageId = responseBodyImage.getId();
+        String imageUrl = responseBodyImage.getUrl();
 
-        // Step 3.
-        PostFavouritesRequest postFavouritesRequest = PostFavouritesRequest.builder()
-                .authorizationHeader(authHeader)
-                .body(PostFavouritesRequestBody.builder().imageId(imageId).build())
-                .build();
-        PostFavouritesResponse postFavouritesResponse = apiRequests.requestPostFavourites(postFavouritesRequest);
-        PostFavouritesResponseBody postFavouritesResponseBody = postFavouritesResponse.getBody();
+        PostFavouritesResponseBody postFavouritesResponseBody = steps.doStep3(imageId);
         Assert.assertEquals(postFavouritesResponseBody.getMessage(), "SUCCESS", "добавили изображение в избранное");
         long favouriteId = postFavouritesResponseBody.getId();
 
-        // Step 4.
-        GetFavouritesRequest getFavouritesRequest = GetFavouritesRequest.builder()
-                .authorizationHeader(authHeader)
-                .queryParams(GetFavouritesRequestQueryParams.builder().build())
-                .build();
-        GetFavouritesResponse getFavouritesResponse = apiRequests.requestGetFavourites(getFavouritesRequest);
-        List<ResponseBodyFavourite> favouritesResponseBody = getFavouritesResponse.getBody();
-        ResponseBodyFavourite responseBodyFavourite = favouritesResponseBody.stream()
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Favorite Image was not found."));
+        ResponseBodyFavourite responseBodyFavourite = steps.doStep4();
         ResponseBodyFavourite expectedResponseBodyFavourite = ResponseBodyFavourite.builder()
                 .id(favouriteId)
                 .imageId(imageId)
@@ -94,23 +58,11 @@ public class TheCatApiTest {
                 "ключ \"id\" (избранного) со значением, полученным в шаге 3, а также ключ \"image_id\" со значением, " +
                 "полученным на шаге 2");
 
-        // Step 5.
-        DeleteFavouritesRequest deleteFavouritesRequest = DeleteFavouritesRequest.builder()
-                .authorizationHeader(authHeader)
-                .favouriteId(favouriteId)
-                .build();
-        DeleteFavouritesResponse deleteFavouritesResponse = apiRequests.requestDeleteFavourites(deleteFavouritesRequest);
-        DeleteFavouritesResponseBody deleteFavouritesResponseBody = deleteFavouritesResponse.getBody();
+        DeleteFavouritesResponseBody deleteFavouritesResponseBody = steps.doStep5(favouriteId);
         Assert.assertEquals(deleteFavouritesResponseBody.getMessage(), "SUCCESS",
                 "присутствует ключ \"message\" со значением \"SUCCESS\"");
 
-        // Step 6.
-        GetFavouritesRequest getFavouritesRequest2 = GetFavouritesRequest.builder()
-                .authorizationHeader(authHeader)
-                .queryParams(GetFavouritesRequestQueryParams.builder().build())
-                .build();
-        GetFavouritesResponse getFavouritesResponse2 = apiRequests.requestGetFavourites(getFavouritesRequest2);
-        List<ResponseBodyFavourite> favouritesResponseBody2 = getFavouritesResponse2.getBody();
+        List<ResponseBodyFavourite> favouritesResponseBody2 = steps.doStep6();
         Assert.assertTrue(favouritesResponseBody2.isEmpty(), "в ответе отсутствует ключ \"id\" (избранного) со значением, " +
                 "полученным в шаге 3 (т.е. что изображение действительно было удалено из избранного)");
     }
