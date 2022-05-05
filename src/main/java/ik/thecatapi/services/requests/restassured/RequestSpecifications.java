@@ -41,4 +41,15 @@ public final class RequestSpecifications {
                 .setContentType(ContentType.JSON.withCharset(StandardCharsets.UTF_8))
                 .build();
     }
+
+    public RequestSpecification getDeleteRequestSpecification(String baseUri, String basePath) {
+        return new RequestSpecBuilder()
+                .setBaseUri(baseUri)
+                .setBasePath(basePath)
+                .addFilter(new AllureRestAssured())
+                .setRelaxedHTTPSValidation()
+                .log(LogDetail.ALL)
+                .setContentType(ContentType.JSON.withCharset(StandardCharsets.UTF_8))
+                .build();
+    }
 }

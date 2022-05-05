@@ -3,7 +3,6 @@ package ik.thecatapi.models.requests.favourites;
 import lombok.Data;
 
 @Data
-public class PostFavouritesResponseBody {
+public class DeleteFavouritesResponseBody {
     private String message;
-    private long id;
 }

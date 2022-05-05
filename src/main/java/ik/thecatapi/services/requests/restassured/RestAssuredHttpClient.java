@@ -12,12 +12,14 @@ import static io.restassured.RestAssured.given;
 public class RestAssuredHttpClient {
     private final RequestSpecification getReqSpec;
     private final RequestSpecification postReqSpec;
+    private final RequestSpecification deleteReqSpec;
 
     public RestAssuredHttpClient() {
         String baseUri = "https://api.thecatapi.com"; // TODO: impl config
         String basePath = "/v1";
         this.getReqSpec = RequestSpecifications.getInstance().getGetRequestSpecification(baseUri, basePath);
         this.postReqSpec = RequestSpecifications.getInstance().getPostRequestSpecification(baseUri, basePath);
+        this.deleteReqSpec = RequestSpecifications.getInstance().getDeleteRequestSpecification(baseUri, basePath);
     }
 
     @Step("HTTP GET {uriPath}")
@@ -38,5 +40,14 @@ public class RestAssuredHttpClient {
                     .body(body)
                 .when()
                     .post(uriPath);
+    }
+
+    @Step("HTTP DELETE {uriPath}")
+    public Response delete(String uriPath, Headers headers) {
+        return given()
+                    .spec(deleteReqSpec)
+                    .headers(headers)
+                .when()
+                    .delete(uriPath);
     }
 }

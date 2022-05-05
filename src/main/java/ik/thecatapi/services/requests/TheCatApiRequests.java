@@ -1,7 +1,7 @@
 package ik.thecatapi.services.requests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ik.thecatapi.config.EndpointPath;
+import ik.thecatapi.config.EndpointUriPath;
 import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
 import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
 import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
@@ -28,11 +28,25 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
+    public DeleteFavouritesResponse requestDeleteFavourites(DeleteFavouritesRequest request) {
+        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
+        Headers headers = new Headers(authorizationHeader);
+        String uriPath = EndpointUriPath.FAVOURITES.getValue()
+                + EndpointUriPath.DELIMITER.getValue()
+                + request.getFavouriteId();
+        Response restResponse = httpClient.delete(uriPath, headers);
+        DeleteFavouritesResponse response = new DeleteFavouritesResponse(restResponse.getStatusCode());
+        response.setBody(restResponse.as(DeleteFavouritesResponseBody.class));
+        log.info("{}", response);
+        return response;
+    }
+
+    @Attachment("Response Object")
     public GetBreedsSearchResponse requestGetBreedsSearch(GetBreedsSearchRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
-        Response restResponse = httpClient.get(EndpointPath.BREEDS_SEARCH.getUriPath(), queryParams, headers);
+        Response restResponse = httpClient.get(EndpointUriPath.BREEDS_SEARCH.getValue(), queryParams, headers);
         GetBreedsSearchResponse response = new GetBreedsSearchResponse(restResponse.getStatusCode());
         ResponseBodyBreed[] bodyBreeds = restResponse.as(ResponseBodyBreed[].class);
         response.setBody(Arrays.asList(bodyBreeds));
@@ -45,7 +59,7 @@ public class TheCatApiRequests {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
-        Response restResponse = httpClient.get(EndpointPath.IMAGES_SEARCH.getUriPath(), queryParams, headers);
+        Response restResponse = httpClient.get(EndpointUriPath.IMAGES_SEARCH.getValue(), queryParams, headers);
         GetImagesSearchResponse response = new GetImagesSearchResponse(restResponse.getStatusCode());
         ResponseBodyImage[] bodyImages = restResponse.as(ResponseBodyImage[].class);
         response.setBody(Arrays.asList(bodyImages));
@@ -58,7 +72,7 @@ public class TheCatApiRequests {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
-        Response restResponse = httpClient.get(EndpointPath.FAVOURITES.getUriPath(), queryParams, headers);
+        Response restResponse = httpClient.get(EndpointUriPath.FAVOURITES.getValue(), queryParams, headers);
         GetFavouritesResponse response = new GetFavouritesResponse(restResponse.getStatusCode());
         ResponseBodyFavourite[] bodyImages = restResponse.as(ResponseBodyFavourite[].class);
         response.setBody(Arrays.asList(bodyImages));
@@ -71,7 +85,7 @@ public class TheCatApiRequests {
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         PostFavouritesRequestBody body = request.getBody();
-        Response restResponse = httpClient.post(EndpointPath.FAVOURITES.getUriPath(), headers, body);
+        Response restResponse = httpClient.post(EndpointUriPath.FAVOURITES.getValue(), headers, body);
         PostFavouritesResponse response = new PostFavouritesResponse(restResponse.getStatusCode());
         response.setBody(restResponse.as(PostFavouritesResponseBody.class));
         log.info("{}", response);
