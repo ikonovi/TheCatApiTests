@@ -2,9 +2,12 @@ package ik.thecatapi.services.requests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ik.thecatapi.config.EndpointPath;
-import ik.thecatapi.models.requests.ResponseBodyBreed;
+import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
 import ik.thecatapi.models.requests.breed_search.BreedsSearchRequest;
 import ik.thecatapi.models.requests.breed_search.BreedsSearchResponse;
+import ik.thecatapi.models.requests.favourites.FavouritesRequest;
+import ik.thecatapi.models.requests.favourites.FavouritesResponse;
+import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.ImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.ImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
@@ -47,6 +50,19 @@ public class TheCatApiRequests {
         Response restResponse = httpClient.get(EndpointPath.IMAGES_SEARCH.getUriPath(), queryParams, headers);
         ImagesSearchResponse response = new ImagesSearchResponse(restResponse.getStatusCode());
         ResponseBodyImage[] bodyImages = restResponse.as(ResponseBodyImage[].class);
+        response.setBody(Arrays.asList(bodyImages));
+        log.info("{}", response);
+        return response;
+    }
+
+    @Attachment("Response Object")
+    public FavouritesResponse requestGetFavourites(FavouritesRequest request) {
+        Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
+        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
+        Headers headers = new Headers(authorizationHeader);
+        Response restResponse = httpClient.get(EndpointPath.FAVOURITES.getUriPath(), queryParams, headers);
+        FavouritesResponse response = new FavouritesResponse(restResponse.getStatusCode());
+        ResponseBodyFavourite[] bodyImages = restResponse.as(ResponseBodyFavourite[].class);
         response.setBody(Arrays.asList(bodyImages));
         log.info("{}", response);
         return response;

@@ -1,22 +1,20 @@
-package ik.thecatapi.models.requests.images_search;
+package ik.thecatapi.models.requests.favourites;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ResponseBodyImage {
-    private List<ResponseBodyBreed> breeds;
-    private String id;
-    private String url;
+public class ResponseBodyFavourite {
+    private long id;
+    private String imageId;
 }

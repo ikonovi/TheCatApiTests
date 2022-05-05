@@ -4,7 +4,11 @@ import ik.thecatapi.models.requests.base.AuthorizationHeader;
 import ik.thecatapi.models.requests.breed_search.BreedsSearchRequest;
 import ik.thecatapi.models.requests.breed_search.BreedsSearchRequestQueryParams;
 import ik.thecatapi.models.requests.breed_search.BreedsSearchResponse;
-import ik.thecatapi.models.requests.ResponseBodyBreed;
+import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.favourites.FavouritesRequest;
+import ik.thecatapi.models.requests.favourites.FavouritesRequestQueryParams;
+import ik.thecatapi.models.requests.favourites.FavouritesResponse;
+import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.ImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.ImagesSearchRequestQueryParams;
 import ik.thecatapi.models.requests.images_search.ImagesSearchResponse;
@@ -13,7 +17,6 @@ import ik.thecatapi.services.requests.TheCatApiRequests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class TheCatApiTest {
 
     @Test(description = "Задание 2 (Автоматизация API)")
     public void testCase1() {
+
         // #1
         BreedsSearchRequest breedsSearchRequest = BreedsSearchRequest.builder()
                 .authorizationHeader(authHeader)
@@ -64,6 +68,27 @@ public class TheCatApiTest {
                 .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
         Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
 
+        // #3
 
+
+        long favouriteId = 111;
+
+        // #4
+        FavouritesRequest favouritesRequest = FavouritesRequest.builder()
+                .authorizationHeader(authHeader)
+                .queryParams(FavouritesRequestQueryParams.builder().build())
+                .build();
+        FavouritesResponse favouritesResponse = apiRequests.requestGetFavourites(favouritesRequest);
+        List<ResponseBodyFavourite> favouritesResponseBody = favouritesResponse.getBody();
+        ResponseBodyFavourite responseBodyFavourite = favouritesResponseBody.stream()
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Favorite Image was not found."));
+        ResponseBodyFavourite expectedResponseBodyFavourite = ResponseBodyFavourite.builder()
+                .id(favouriteId)
+                .imageId(responseBodyImage.getId())
+                .build();
+        Assert.assertEquals(responseBodyFavourite, expectedResponseBodyFavourite, "в ответе присутствует " +
+                "ключ \"id\" (избранного) со значением, полученным в шаге 3, а также ключ \"image_id\" со значением, " +
+                "полученным на шаге 2");
     }
 }

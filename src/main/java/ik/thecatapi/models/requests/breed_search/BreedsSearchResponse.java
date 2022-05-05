@@ -1,7 +1,6 @@
 package ik.thecatapi.models.requests.breed_search;
 
 import ik.thecatapi.models.requests.base.BaseResponse;
-import ik.thecatapi.models.requests.ResponseBodyBreed;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

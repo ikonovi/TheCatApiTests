@@ -4,7 +4,8 @@ import java.util.StringJoiner;
 
 public enum EndpointPath {
     BREEDS_SEARCH(Constants.BREEDS_SEARCH),
-    IMAGES_SEARCH(Constants.IMAGES_SEARCH);
+    IMAGES_SEARCH(Constants.IMAGES_SEARCH),
+    FAVOURITES(Constants.FAVOURITES);
 
     private final String uriPath;
 
@@ -22,6 +23,7 @@ public enum EndpointPath {
     public static class Constants {
         public static final String BREEDS_SEARCH = "breeds/search";
         public static final String IMAGES_SEARCH = "/images/search";
+        public static final String FAVOURITES = "/favourites";
 
         private Constants() {
         }
