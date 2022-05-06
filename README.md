@@ -17,7 +17,7 @@
 4. Выполнить комманду 
  `mvn clean test -Dapi_key=<ваш_API_Key>` чтобы выполнить тесты.
 
-### Создать отчет о запуске тестов
+#### Создать отчет о запуске тестов
 
 5. Выполнить последовательно команды <br>
    `allure generate --clean --report-dir ./target/allure-report  ./target/allure-results`  
