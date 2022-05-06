@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.categories;
 
 import ik.thecatapi.models.requests.base.BaseRequest;
 import lombok.Data;
@@ -10,6 +10,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuperBuilder
-public class GetBreedsSearchRequest extends BaseRequest {
-    private GetBreedsSearchRequestQueryParams queryParams;
+public class GetCategoriesRequest extends BaseRequest {
 }

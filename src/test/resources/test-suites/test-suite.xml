@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Задание 2 (Автоматизация API)">
-    <test name="Тесты" parallel="methods" thread-count="3">
+    <test name="Тесты" parallel="methods" thread-count="10">
         <classes>
             <class name="ik.thecatapi.tests.TheCatApiTest"/>
             <parameter name="breedName" value="Scottish Fold"/>

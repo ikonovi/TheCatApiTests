@@ -1,10 +1,13 @@
 package ik.thecatapi.services.requests;
 
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequestQueryParams;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
-import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchRequest;
+import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchRequestQueryParams;
+import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
+import ik.thecatapi.models.requests.breeds_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.categories.GetCategoriesRequest;
+import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
+import ik.thecatapi.models.requests.categories.ResponseBodyCategory;
 import ik.thecatapi.models.requests.favourites.*;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
@@ -100,5 +103,14 @@ public class Steps {
                 .build();
         GetFavouritesResponse getFavouritesResponse2 = apiRequests.requestGetFavourites(getFavouritesRequest2);
         return getFavouritesResponse2.getBody();
+    }
+
+    @Step("Выполнить запрос к /categories")
+    public List<ResponseBodyCategory> getCategories() {
+        GetCategoriesRequest getCategoriesRequest = GetCategoriesRequest.builder()
+                .authorizationHeader(authHeader)
+                .build();
+        GetCategoriesResponse getCategoriesResponse = apiRequests.requestGetCategories(getCategoriesRequest);
+        return getCategoriesResponse.getBody();
     }
 }

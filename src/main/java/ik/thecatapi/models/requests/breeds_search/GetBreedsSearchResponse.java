@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.breeds_search;
 
 import ik.thecatapi.models.requests.base.BaseResponse;
 import lombok.EqualsAndHashCode;

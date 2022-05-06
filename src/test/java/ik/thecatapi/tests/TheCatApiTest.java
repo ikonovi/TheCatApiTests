@@ -1,7 +1,8 @@
 package ik.thecatapi.tests;
 
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
-import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.breeds_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.categories.ResponseBodyCategory;
 import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponseBody;
 import ik.thecatapi.models.requests.favourites.PostFavouritesResponseBody;
 import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
@@ -44,7 +45,7 @@ public class TheCatApiTest {
                 .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
         Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
         String imageId = responseBodyImage.getId();
-        String imageUrl = responseBodyImage.getUrl();
+        //String imageUrl = responseBodyImage.getUrl();
 
         PostFavouritesResponseBody postFavouritesResponseBody = steps.doStep3(imageId);
         Assert.assertEquals(postFavouritesResponseBody.getMessage(), "SUCCESS", "добавили изображение в избранное");
@@ -69,7 +70,10 @@ public class TheCatApiTest {
     }
 
     @Test(description = "Тест кэйс Бонусное задание - В ответе на запрос к /categories присутствует ключ \"name\" со значением \"boxes\"")
-    public void testCategories() {
-
+    public void testCategory() {
+        final String name = "boxes";
+        List<ResponseBodyCategory> categories = steps.getCategories();
+        boolean anyMatchName = categories.stream().anyMatch(category -> category.getName().equals(name));
+        Assert.assertTrue(anyMatchName);
     }
 }

@@ -23,6 +23,15 @@ public class RestAssuredHttpClient {
     }
 
     @Step("HTTP GET {uriPath}")
+    public Response get(String uriPath, Headers headers) {
+        return given()
+                .spec(getReqSpec)
+                .headers(headers)
+                .when()
+                .get(uriPath);
+    }
+
+    @Step("HTTP GET {uriPath}")
     public Response get(String uriPath, Map<String, ?> queryParams, Headers headers) {
         return given()
                     .spec(getReqSpec)

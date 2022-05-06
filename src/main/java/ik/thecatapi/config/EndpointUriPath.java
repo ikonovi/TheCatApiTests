@@ -6,7 +6,8 @@ public enum EndpointUriPath {
     DELIMITER(Constants.DELIMITER),
     BREEDS_SEARCH(Constants.BREEDS_SEARCH),
     IMAGES_SEARCH(Constants.IMAGES_SEARCH),
-    FAVOURITES(Constants.FAVOURITES);
+    FAVOURITES(Constants.FAVOURITES),
+    CATEGORIES(Constants.CATEGORIES);
 
     private final String value;
 
@@ -26,6 +27,7 @@ public enum EndpointUriPath {
         public static final String BREEDS_SEARCH = "/breeds/search";
         public static final String IMAGES_SEARCH = "/images/search";
         public static final String FAVOURITES = "/favourites";
+        public static final String CATEGORIES = "/categories";
 
         private Constants() {
         }

@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.categories;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ResponseBodyBreed {
-    private String id;
+public class ResponseBodyCategory {
+    private int id;
+    private String name;
 }

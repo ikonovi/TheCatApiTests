@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.breed_search;
+package ik.thecatapi.models.requests.breeds_search;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

@@ -2,9 +2,13 @@ package ik.thecatapi.services.requests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ik.thecatapi.config.EndpointUriPath;
-import ik.thecatapi.models.requests.breed_search.ResponseBodyBreed;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchRequest;
-import ik.thecatapi.models.requests.breed_search.GetBreedsSearchResponse;
+import ik.thecatapi.models.requests.base.AuthorizationHeader;
+import ik.thecatapi.models.requests.breeds_search.ResponseBodyBreed;
+import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchRequest;
+import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
+import ik.thecatapi.models.requests.categories.GetCategoriesRequest;
+import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
+import ik.thecatapi.models.requests.categories.ResponseBodyCategory;
 import ik.thecatapi.models.requests.favourites.*;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
@@ -50,6 +54,19 @@ public class TheCatApiRequests {
         GetBreedsSearchResponse response = new GetBreedsSearchResponse(restResponse.getStatusCode());
         ResponseBodyBreed[] bodyBreeds = restResponse.as(ResponseBodyBreed[].class);
         response.setBody(Arrays.asList(bodyBreeds));
+        log.info("{}", response);
+        return response;
+    }
+
+    @Attachment("Response Object")
+    public GetCategoriesResponse requestGetCategories(GetCategoriesRequest request) {
+        AuthorizationHeader authHeader = request.getAuthorizationHeader();
+        Header authorizationHeader = new Header(authHeader.getName(), authHeader.getValue());
+        Headers headers = new Headers(authorizationHeader);
+        Response restResponse = httpClient.get(EndpointUriPath.CATEGORIES.getValue(), headers);
+        GetCategoriesResponse response = new GetCategoriesResponse(restResponse.getStatusCode());
+        ResponseBodyCategory[] bodyCategories = restResponse.as(ResponseBodyCategory[].class);
+        response.setBody(Arrays.asList(bodyCategories));
         log.info("{}", response);
         return response;
     }
