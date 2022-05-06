@@ -10,11 +10,15 @@ import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
 import ik.thecatapi.services.requests.Steps;
 import ik.thecatapi.services.requests.TheCatApiRequests;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class TheCatApiTest {
@@ -46,7 +50,7 @@ public class TheCatApiTest {
                 .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
         Assert.assertEquals(responseBodyImageBreed.getId(), breedId,"найдено изображение с указанным breed_id");
         String imageId = responseBodyImage.getId();
-        //String imageUrl = responseBodyImage.getUrl();
+        String imageUrl = responseBodyImage.getUrl();
 
         PostFavouritesResponseBody postFavouritesResponseBody = steps.doStep3(imageId);
         Assert.assertEquals(postFavouritesResponseBody.getMessage(), "SUCCESS", "добавили изображение в избранное");
@@ -68,7 +72,13 @@ public class TheCatApiTest {
         List<ResponseBodyFavourite> favouritesResponseBody2 = steps.doStep6();
         Assert.assertTrue(favouritesResponseBody2.isEmpty(), "в ответе отсутствует ключ \"id\" (избранного) со значением, " +
                 "полученным в шаге 3 (т.е. что изображение действительно было удалено из избранного)");
+
+        String fileContent = "Название породы: " + breedName +
+                "\nid породы: " + breedId +
+                "\nURL: " + imageUrl;
+        steps.attachBreedInfoToReport(fileContent);
     }
+
 
     @Test(description = "Тест кэйс Бонусное задание - В ответе на запрос к /categories присутствует ключ \"name\" " +
             "с заданным значением",

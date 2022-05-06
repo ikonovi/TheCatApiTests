@@ -13,8 +13,11 @@ import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Steps {
@@ -112,5 +115,10 @@ public class Steps {
                 .build();
         GetCategoriesResponse getCategoriesResponse = apiRequests.requestGetCategories(getCategoriesRequest);
         return getCategoriesResponse.getBody();
+    }
+
+    public void attachBreedInfoToReport(String fileContent) {
+        Allure.addAttachment("О кошачей породе", "text/plain",
+                new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)),".txt");
     }
 }
