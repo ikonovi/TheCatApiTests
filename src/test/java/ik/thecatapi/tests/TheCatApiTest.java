@@ -10,6 +10,7 @@ import ik.thecatapi.services.requests.Steps;
 import ik.thecatapi.services.requests.TheCatApiRequests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -17,24 +18,24 @@ import java.util.List;
 public class TheCatApiTest {
     TheCatApiRequests apiRequests;
     AuthorizationHeader authHeader;
-
     Steps steps;
 
     @BeforeClass
     public void setUp() {
+        final String AUTHORIZATION_HEADER_NAME = "x-api-key";
+        String apiKey = System.getProperty("api_key");
         apiRequests = new TheCatApiRequests();
-        String headerName = "x-api-key"; // TODO conf prop
-        String API_KEY = System.getenv("API_KEY"); // TODO env var
         authHeader = AuthorizationHeader.builder()
-                .name(headerName)
-                .value(API_KEY)
+                .name(AUTHORIZATION_HEADER_NAME)
+                .value(apiKey)
                 .build();
         steps = new Steps(apiRequests, authHeader);
     }
 
-    @Test(description = "Задание 2 (Автоматизация API)")
-    public void testCase1() {
-        ResponseBodyBreed responseBodyBreed = steps.doStep1("Scottish Fold"); // TODO: conf, testng data?
+    @Test(description = "Тест кэйс - c шагами")
+    @Parameters({"breedName"})
+    public void testCase1(String breedName) {
+        ResponseBodyBreed responseBodyBreed = steps.doStep1(breedName);
         String breedId = responseBodyBreed.getId();
 
         ResponseBodyImage responseBodyImage = steps.doStep2(breedId);
@@ -65,5 +66,10 @@ public class TheCatApiTest {
         List<ResponseBodyFavourite> favouritesResponseBody2 = steps.doStep6();
         Assert.assertTrue(favouritesResponseBody2.isEmpty(), "в ответе отсутствует ключ \"id\" (избранного) со значением, " +
                 "полученным в шаге 3 (т.е. что изображение действительно было удалено из избранного)");
+    }
+
+    @Test(description = "Тест кэйс Бонусное задание - В ответе на запрос к /categories присутствует ключ \"name\" со значением \"boxes\"")
+    public void testCategories() {
+
     }
 }
