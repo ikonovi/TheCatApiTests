@@ -1,5 +1,6 @@
 package ik.thecatapi.tests;
 
+import ik.thecatapi.data.DataProviders;
 import ik.thecatapi.models.requests.base.AuthorizationHeader;
 import ik.thecatapi.models.requests.breeds_search.ResponseBodyBreed;
 import ik.thecatapi.models.requests.categories.ResponseBodyCategory;
@@ -69,11 +70,13 @@ public class TheCatApiTest {
                 "полученным в шаге 3 (т.е. что изображение действительно было удалено из избранного)");
     }
 
-    @Test(description = "Тест кэйс Бонусное задание - В ответе на запрос к /categories присутствует ключ \"name\" со значением \"boxes\"")
-    public void testCategory() {
-        final String name = "boxes";
+    @Test(description = "Тест кэйс Бонусное задание - В ответе на запрос к /categories присутствует ключ \"name\" " +
+            "с заданным значением",
+            dataProvider = "Category names",
+            dataProviderClass = DataProviders.class)
+    public void testCategory(String name) {
         List<ResponseBodyCategory> categories = steps.getCategories();
-        boolean anyMatchName = categories.stream().anyMatch(category -> category.getName().equals(name));
-        Assert.assertTrue(anyMatchName);
+        boolean anyMatch = categories.stream().anyMatch(category -> category.getName().equals(name));
+        Assert.assertTrue(anyMatch);
     }
 }
