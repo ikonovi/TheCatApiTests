@@ -32,7 +32,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public DeleteFavouritesResponse requestDeleteFavourites(DeleteFavouritesRequest request) {
+    public DeleteFavouritesResponse deleteFavourites(DeleteFavouritesRequest request) {
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         String uriPath = EndpointUriPath.FAVOURITES.getValue()
@@ -46,7 +46,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public GetBreedsSearchResponse requestGetBreedsSearch(GetBreedsSearchRequest request) {
+    public GetBreedsSearchResponse getBreedsSearch(GetBreedsSearchRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
@@ -59,7 +59,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public GetCategoriesResponse requestGetCategories(GetCategoriesRequest request) {
+    public GetCategoriesResponse getCategories(GetCategoriesRequest request) {
         AuthorizationHeader authHeader = request.getAuthorizationHeader();
         Header authorizationHeader = new Header(authHeader.getName(), authHeader.getValue());
         Headers headers = new Headers(authorizationHeader);
@@ -72,7 +72,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public GetImagesSearchResponse requestGetImagesSearch(GetImagesSearchRequest request) {
+    public GetImagesSearchResponse getImagesSearch(GetImagesSearchRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
@@ -85,7 +85,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public GetFavouritesResponse requestGetFavourites(GetFavouritesRequest request) {
+    public GetFavouritesResponse getFavourites(GetFavouritesRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
@@ -98,7 +98,7 @@ public class TheCatApiRequests {
     }
 
     @Attachment("Response Object")
-    public PostFavouritesResponse requestPostFavourites(PostFavouritesRequest request) {
+    public PostFavouritesResponse postFavourites(PostFavouritesRequest request) {
         Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
         Headers headers = new Headers(authorizationHeader);
         PostFavouritesRequestBody body = request.getBody();
