@@ -3,7 +3,7 @@
 
 #### Требование к среде для запуска тестов
 
-- Установлен JDK 1.8 и выше. 
+- Установлен JDK 11 и выше. 
 - Установлен Maven 3.8 и выше, команда `mvn` доступна из командной строки.  
 - Установлен Allure commandline от версии 2.17 и команда `allure` доступна из командной строки.
   [Инструкция к установке](https://docs.qameta.io/allure/#_installing_a_commandline)
@@ -23,4 +23,7 @@
    `allure generate --clean --report-dir ./target/allure-report  ./target/allure-results`  
    `allure open --host localhost --port 8899 ./target/allure-report`
 6. Смотреть Allure отчет о результатах тестового прогона в открывшемся окне веб-браузера.
+
+---------
+
 
