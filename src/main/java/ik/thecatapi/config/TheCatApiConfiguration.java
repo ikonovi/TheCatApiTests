@@ -10,6 +10,7 @@ import java.util.Properties;
 public class TheCatApiConfiguration {
     private static String theCatApiBaseUri;
     private static String theCatApiBasePath;
+    private static String httpAuthorizationHeaderName;
 
     private static final String PROPS_FILE = "env_config.properties";
 
@@ -22,6 +23,7 @@ public class TheCatApiConfiguration {
         Properties props = PropertyFileUtils.getFromResources(PROPS_FILE);
         theCatApiBaseUri = props.getProperty("theCatApi.baseUri");
         theCatApiBasePath = props.getProperty("theCatApi.basePath");
+        httpAuthorizationHeaderName = props.getProperty("theCatApi.http.authorization.header.name");
     }
 
     public static String getTheCatApiBaseUri() {
@@ -30,5 +32,9 @@ public class TheCatApiConfiguration {
 
     public static String getTheCatApiBasePath() {
         return theCatApiBasePath;
+    }
+
+    public static String getHttpAuthorizationHeaderName() {
+        return httpAuthorizationHeaderName;
     }
 }

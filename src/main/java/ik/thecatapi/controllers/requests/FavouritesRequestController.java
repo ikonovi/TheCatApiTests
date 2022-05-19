@@ -1,8 +1,7 @@
-package ik.thecatapi.requests;
+package ik.thecatapi.controllers.requests;
 
 import ik.thecatapi.config.EndpointUriPath;
 import ik.thecatapi.models.requests.favourites.*;
-import ik.thecatapi.requests.common.TheCatApiRequest;
 import io.qameta.allure.Attachment;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -13,16 +12,14 @@ import java.util.Arrays;
 import java.util.Map;
 
 @Slf4j
-public class FavouritesRequests extends TheCatApiRequest {
+public class FavouritesRequestController extends AbstractRequestController {
 
     @Attachment("Response Object")
     public GetFavouritesResponse get(GetFavouritesRequest request) {
         Map<String, Object> queryParams = transformRequestQueryParamsToMapObject(request.getQueryParams());
-
-        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
-        Headers headers = new Headers(authorizationHeader);
+        Header authHeader = super.getAuthorizationHeader(request);
+        Headers headers = new Headers(authHeader);
         Response restResponse = httpClient.get(EndpointUriPath.FAVOURITES.getValue(), queryParams, headers);
-
         GetFavouritesResponse response = new GetFavouritesResponse(restResponse.getStatusCode());
         ResponseBodyFavourite[] bodyImages = restResponse.as(ResponseBodyFavourite[].class);
         response.setBody(Arrays.asList(bodyImages));
@@ -32,12 +29,10 @@ public class FavouritesRequests extends TheCatApiRequest {
 
     @Attachment("Response Object")
     public PostFavouritesResponse post(PostFavouritesRequest request) {
-
-        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
-        Headers headers = new Headers(authorizationHeader);
+        Header authHeader = super.getAuthorizationHeader(request);
+        Headers headers = new Headers(authHeader);
         PostFavouritesRequestBody body = request.getBody();
         Response restResponse = httpClient.post(EndpointUriPath.FAVOURITES.getValue(), headers, body);
-
         PostFavouritesResponse response = new PostFavouritesResponse(restResponse.getStatusCode());
         response.setBody(restResponse.as(PostFavouritesResponseBody.class));
         log.info("{}", response);
@@ -46,8 +41,8 @@ public class FavouritesRequests extends TheCatApiRequest {
 
     @Attachment("Response Object")
     public DeleteFavouritesResponse delete(DeleteFavouritesRequest request) {
-        Header authorizationHeader = new Header(request.getAuthorizationHeader().getName(), request.getAuthorizationHeader().getValue());
-        Headers headers = new Headers(authorizationHeader);
+        Header authHeader = super.getAuthorizationHeader(request);
+        Headers headers = new Headers(authHeader);
         String uriPath = EndpointUriPath.FAVOURITES.getValue()
                 + EndpointUriPath.DELIMITER.getValue()
                 + request.getFavouriteId();
