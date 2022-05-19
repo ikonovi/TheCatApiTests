@@ -1,6 +1,6 @@
 package ik.thecatapi.models.requests.images_search;
 
-import ik.thecatapi.models.requests.base.BaseResponse;
+import ik.thecatapi.models.requests.CommonResponse;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class GetImagesSearchResponse extends BaseResponse {
+public class GetImagesSearchResponse extends CommonResponse {
     private List<ResponseBodyImage> body;
 
     public GetImagesSearchResponse(int statusCode) {

@@ -1,6 +1,6 @@
 package ik.thecatapi.models.requests.favourites;
 
-import ik.thecatapi.models.requests.base.BaseResponse;
+import ik.thecatapi.models.requests.CommonResponse;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DeleteFavouritesResponse extends BaseResponse {
+public class DeleteFavouritesResponse extends CommonResponse {
     private DeleteFavouritesResponseBody body;
 
     public DeleteFavouritesResponse(int statusCode) {

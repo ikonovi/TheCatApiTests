@@ -1,4 +1,4 @@
-package ik.thecatapi.models.requests.base;
+package ik.thecatapi.models.requests;
 
 import lombok.Builder;
 import lombok.Data;

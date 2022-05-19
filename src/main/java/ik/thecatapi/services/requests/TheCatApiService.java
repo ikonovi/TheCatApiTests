@@ -1,6 +1,7 @@
 package ik.thecatapi.services.requests;
 
-import ik.thecatapi.models.requests.base.AuthorizationHeader;
+import ik.thecatapi.requests.BreedsSearchRequests;
+import ik.thecatapi.models.requests.AuthorizationHeader;
 import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchRequest;
 import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchRequestQueryParams;
 import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
@@ -12,6 +13,9 @@ import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
+import ik.thecatapi.requests.CategoriesRequests;
+import ik.thecatapi.requests.FavouritesRequests;
+import ik.thecatapi.requests.ImagesSearchRequests;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.awaitility.Awaitility;
@@ -25,11 +29,17 @@ import java.util.function.Predicate;
 
 public class TheCatApiService {
     private final AuthorizationHeader authHeader;
-    private final TheCatApiRequests apiRequests;
+    private final BreedsSearchRequests breedsSearchRequests;
+    private final ImagesSearchRequests imagesSearchRequests;
+    private final FavouritesRequests favouritesRequests;
+    private final CategoriesRequests categoriesRequests;
 
     public TheCatApiService(String apiKey) {
         this.authHeader = createAuthorizationHeader(apiKey);
-        this.apiRequests = new TheCatApiRequests();
+        this.breedsSearchRequests = new BreedsSearchRequests();
+        this.imagesSearchRequests = new ImagesSearchRequests();
+        this.favouritesRequests = new FavouritesRequests();
+        this.categoriesRequests = new CategoriesRequests();
     }
 
     @Step("1. Выполнить запрос к /breeds/search по названию породы {breedName}.")
@@ -41,7 +51,7 @@ public class TheCatApiService {
                                 .q(breedName)
                                 .build())
                 .build();
-        return apiRequests.getBreedsSearch(getBreedsSearchRequest);
+        return breedsSearchRequests.get(getBreedsSearchRequest);
     }
 
     @Step("В ответе достать id породы.")
@@ -59,7 +69,7 @@ public class TheCatApiService {
                 .authorizationHeader(authHeader)
                 .queryParams(GetImagesSearchRequestQueryParams.builder().breedId(breedId).build())
                 .build();
-        return apiRequests.getImagesSearch(getImagesSearchRequest);
+        return imagesSearchRequests.get(getImagesSearchRequest);
     }
 
     @Step("Взять первый Image в результатах поиска.")
@@ -83,7 +93,7 @@ public class TheCatApiService {
                 .authorizationHeader(authHeader)
                 .body(PostFavouritesRequestBody.builder().imageId(imageId).build())
                 .build();
-        return apiRequests.postFavourites(postFavouritesRequest);
+        return favouritesRequests.post(postFavouritesRequest);
     }
 
     @Step("Выполнить get запрос к /favourites.")
@@ -92,7 +102,7 @@ public class TheCatApiService {
                 .authorizationHeader(authHeader)
                 .queryParams(GetFavouritesRequestQueryParams.builder().build())
                 .build();
-        return apiRequests.getFavourites(getFavouritesRequest);
+        return favouritesRequests.get(getFavouritesRequest);
     }
 
 
@@ -102,7 +112,7 @@ public class TheCatApiService {
                 .authorizationHeader(authHeader)
                 .favouriteId(favouriteId)
                 .build();
-        return apiRequests.deleteFavourites(deleteFavouritesRequest);
+        return favouritesRequests.delete(deleteFavouritesRequest);
     }
 
     @Step("Выполнить get запрос к /categories")
@@ -110,7 +120,7 @@ public class TheCatApiService {
         GetCategoriesRequest getCategoriesRequest = GetCategoriesRequest.builder()
                 .authorizationHeader(authHeader)
                 .build();
-        return apiRequests.getCategories(getCategoriesRequest);
+        return categoriesRequests.get(getCategoriesRequest);
     }
 
     @Step("4. Проверить, что в ответе на запрос /favourites присутствует ключ id (избранного) со значением, " +

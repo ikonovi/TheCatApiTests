@@ -1,6 +1,6 @@
 package ik.thecatapi.models.requests.categories;
 
-import ik.thecatapi.models.requests.base.BaseResponse;
+import ik.thecatapi.models.requests.CommonResponse;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class GetCategoriesResponse extends BaseResponse {
+public class GetCategoriesResponse extends CommonResponse {
     private List<ResponseBodyCategory> body;
 
     public GetCategoriesResponse(int statusCode) {

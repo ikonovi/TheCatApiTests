@@ -1,10 +1,10 @@
-package ik.thecatapi.models.requests.base;
+package ik.thecatapi.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BaseResponse {
+public class CommonResponse {
     private int statusCode;
 }
