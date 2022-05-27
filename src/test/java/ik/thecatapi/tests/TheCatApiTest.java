@@ -3,7 +3,6 @@ package ik.thecatapi.tests;
 import ik.thecatapi.checks.CategoriesChecks;
 import ik.thecatapi.checks.FavouritesChecks;
 import ik.thecatapi.checks.ImagesSearchChecks;
-import ik.thecatapi.data.DataProviders;
 import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
 import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
 import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponse;
@@ -16,14 +15,16 @@ import ik.thecatapi.services.requests.CategoriesService;
 import ik.thecatapi.services.requests.FavouritesService;
 import ik.thecatapi.services.requests.ImagesSearchService;
 import io.qameta.allure.Allure;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
-public class TheCatApiTest {
+@DisplayName("Задание 2 (Автоматизация API)")
+class TheCatApiTest {
     CategoriesService categoriesService;
     CategoriesChecks categoriesChecks;
     BreedsSearchService breedsSearchService;
@@ -32,8 +33,8 @@ public class TheCatApiTest {
     FavouritesService favouritesService;
     FavouritesChecks favouritesChecks;
 
-    @BeforeClass
-    public void setUp() {
+    @BeforeEach
+    void initAll() {
         String apiKey = System.getProperty("api_key");
         categoriesService = new CategoriesService(apiKey);
         categoriesChecks = new CategoriesChecks();
@@ -44,9 +45,10 @@ public class TheCatApiTest {
         favouritesChecks = new FavouritesChecks(favouritesService);
     }
 
-    @Test(description = "Тест кейс c шагами")
-    @Parameters({"breedName"})
-    public void testCase1(String breedName) {
+    @DisplayName("Тест кейс c шагами")
+    @ParameterizedTest
+    @ValueSource(strings = {"Scottish Fold"})
+    void testCase1(String breedName) {
         GetBreedsSearchResponse getBreedsSearchResponse = breedsSearchService.requestGetBreedsSearch(breedName);
         String breedId = breedsSearchService.getBreedId(getBreedsSearchResponse);
 
@@ -74,16 +76,16 @@ public class TheCatApiTest {
         attachBreedInfoToReport(fileContent);
     }
 
-    @Test(description = "В ответе на запрос к /categories присутствует ключ \"name\" с заданным значением",
-            dataProvider = "Category names",
-            dataProviderClass = DataProviders.class)
-    public void testCategoryName(String name) {
+    @DisplayName("В ответе на запрос к /categories присутствует ключ \"name\" с заданным значением")
+    @ParameterizedTest
+    @ValueSource(strings = {"boxes"})
+    void testCategoryName(String name) {
         GetCategoriesResponse getCategoriesResponse = categoriesService.requestGetCategories();
         categoriesChecks.checkCategoryName(getCategoriesResponse, name);
     }
 
     private void attachBreedInfoToReport(String fileContent) {
         Allure.addAttachment("О кошачей породе", "text/plain",
-                new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)),".txt");
+                new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)), ".txt");
     }
 }

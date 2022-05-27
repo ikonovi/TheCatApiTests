@@ -7,11 +7,12 @@ import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.services.requests.FavouritesService;
 import io.qameta.allure.Step;
 import org.awaitility.Awaitility;
-import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FavouritesChecks {
     private final FavouritesService service;
@@ -22,8 +23,8 @@ public class FavouritesChecks {
 
     @Step("Проверить, что в ответе присутствует ключ message со значением SUCCESS")
     public void checkPost(PostFavouritesResponse response, String expectedImageId) {
-        Assert.assertEquals(response.getStatusCode(), 200 ,"Status Code");
-        Assert.assertEquals(response.getBody().getMessage(), "SUCCESS",
+        assertEquals( 200, response.getStatusCode(),"Status Code");
+        assertEquals("SUCCESS", response.getBody().getMessage(),
                 "В ответе присутствует ключ message со значением SUCCESS");
 
         long favouriteId = response.getBody().getId();
@@ -49,8 +50,8 @@ public class FavouritesChecks {
 
     @Step("Проверить, что присутствует ключ \"message\" со значением SUCCESS")
     public void checkDelete(DeleteFavouritesResponse response, ResponseBodyFavourite createdFavourite) {
-        Assert.assertEquals(response.getStatusCode(), 200 ,"Status Code");
-        Assert.assertEquals(response.getBody().getMessage(), "SUCCESS",
+        assertEquals(200, response.getStatusCode(), "Status Code");
+        assertEquals( "SUCCESS", response.getBody().getMessage(),
                 "присутствует ключ message со значением SUCCESS");
         checkFavouritesNoItem(createdFavourite);
     }
