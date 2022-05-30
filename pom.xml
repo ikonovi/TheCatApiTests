@@ -111,8 +111,13 @@
                         </property>
                     </systemProperties>
                     <properties>
+                        <!-- junit Parallel test execution is an experimental feature
+                        Configuration parameters to execute top-level classes sequentially but their methods in parallel
+                        -->
                         <configurationParameters>
                             junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.mode.default = concurrent
+                            junit.jupiter.execution.parallel.mode.classes.default = same_thread
                         </configurationParameters>
                     </properties>
                 </configuration>
