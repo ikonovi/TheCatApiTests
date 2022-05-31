@@ -7,11 +7,13 @@ import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.services.requests.FavouritesService;
 import io.qameta.allure.Step;
 import org.awaitility.Awaitility;
-import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FavouritesChecks {
     private final FavouritesService service;
@@ -22,9 +24,10 @@ public class FavouritesChecks {
 
     @Step("Проверить, что в ответе присутствует ключ message со значением SUCCESS")
     public void checkPost(PostFavouritesResponse response, String expectedImageId) {
-        Assert.assertEquals(response.getStatusCode(), 200 ,"Status Code");
-        Assert.assertEquals(response.getBody().getMessage(), "SUCCESS",
-                "В ответе присутствует ключ message со значением SUCCESS");
+        assertAll(
+                () -> assertEquals(200, response.getStatusCode(), "Status Code"),
+                () -> assertEquals("SUCCESS", response.getBody().getMessage(),
+                        "В ответе присутствует ключ message со значением SUCCESS"));
 
         long favouriteId = response.getBody().getId();
         ResponseBodyFavourite createdFavourite = ResponseBodyFavourite.builder()
@@ -49,15 +52,16 @@ public class FavouritesChecks {
 
     @Step("Проверить, что присутствует ключ \"message\" со значением SUCCESS")
     public void checkDelete(DeleteFavouritesResponse response, ResponseBodyFavourite createdFavourite) {
-        Assert.assertEquals(response.getStatusCode(), 200 ,"Status Code");
-        Assert.assertEquals(response.getBody().getMessage(), "SUCCESS",
-                "присутствует ключ message со значением SUCCESS");
-        checkFavouritesNoItem(createdFavourite);
+        assertAll(
+                () -> assertEquals(200, response.getStatusCode(), "Status Code"),
+                () -> assertEquals("SUCCESS", response.getBody().getMessage(),
+                        "присутствует ключ message со значением SUCCESS"),
+                () -> assertFavouritesNoItem(createdFavourite));
     }
 
     @Step("Проверить, что теперь в ответе отсутствует ключ id (избранного) со значением, полученным в шаге 3 " +
             "(т.е. что изображение действительно было удалено из избранного)")
-    private void checkFavouritesNoItem(ResponseBodyFavourite favourite) {
+    private void assertFavouritesNoItem(ResponseBodyFavourite favourite) {
         Callable<GetFavouritesResponse> callable = service::requestGetFavourites;
         Predicate<GetFavouritesResponse> predicateNoItem = response -> response.getBody().stream().noneMatch(f -> f.equals(favourite));
         Predicate<GetFavouritesResponse> predicateStatusCode = response -> response.getStatusCode() == 200;
