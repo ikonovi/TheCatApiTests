@@ -1,10 +1,10 @@
 package ik.thecatapi.controllers.requests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ik.thecatapi.models.requests.AuthorizationHeader;
 import ik.thecatapi.models.requests.CommonRequest;
 import ik.thecatapi.services.requests.restassured.RestAssuredHttpClient;
 import io.restassured.http.Header;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 

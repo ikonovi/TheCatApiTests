@@ -9,46 +9,46 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <aspectj.version>1.9.9.1</aspectj.version>
-        <awaitility.version>4.2.0</awaitility.version>
-        <rest-assured.version>5.0.1</rest-assured.version>
-        <allure-maven.version>2.10.0</allure-maven.version>
-        <allure-rest-assured.version>2.17.3</allure-rest-assured.version>
-        <allure-junit5.version>2.17.3</allure-junit5.version>
-        <junit-jupiter>5.8.2</junit-jupiter>
-        <lombok.version>1.18.24</lombok.version>
-        <log4j.version>2.17.2</log4j.version>
-        <jackson-databind.version>2.13.3</jackson-databind.version>
+        <allure-maven.version>3.0.3</allure-maven.version>
+        <slf4j2.version>2.26.1</slf4j2.version>
+        <lombok.version>1.18.46</lombok.version>
+        <jackson-databind.version>3.2.1</jackson-databind.version>
+        <awaitility.version>4.3.0</awaitility.version>
+        <rest-assured.version>6.0.1</rest-assured.version>
+        <junit-jupiter>5.10.3</junit-jupiter>
+        <allure.version>2.35.4</allure.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
+            <version>${slf4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
+            <version>${slf4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${slf4j2.version}</version>
         </dependency>
         <!-- If existing components use Log4j 1.x and you want to have this logging routed to Log4j 2 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- If existing components use SLF4J and you want to have this logging routed to Log4j 2, -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
         </dependency>
@@ -71,12 +71,12 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-rest-assured</artifactId>
-            <version>${allure-rest-assured.version}</version>
+            <version>${allure.version}</version>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
-            <version>${allure-junit5.version}</version>
+            <artifactId>allure-jupiter</artifactId>
+            <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -92,42 +92,22 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.5.6</version>
                 <configuration>
-                    <!-- Allure specific configuration -->
                     <testFailureIgnore>true</testFailureIgnore>
-                    <argLine>
-                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-                    </argLine>
-                    <systemProperties>
-                        <property>
-                            <name>junit.jupiter.extensions.autodetection.enabled</name>
-                            <value>true</value>
-                        </property>
-                    </systemProperties>
-                    <properties>
-                        <!-- junit Parallel test execution is an experimental feature
-                        Configuration parameters to execute top-level classes sequentially but their methods in parallel
-                        -->
-                        <configurationParameters>
-                            junit.jupiter.execution.parallel.enabled = true
-                            junit.jupiter.execution.parallel.mode.default = concurrent
-                            junit.jupiter.execution.parallel.mode.classes.default = same_thread
-                        </configurationParameters>
-                    </properties>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjweaver</artifactId>
-                        <version>${aspectj.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>io.qameta.allure</groupId>

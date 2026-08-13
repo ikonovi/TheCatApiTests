@@ -85,7 +85,7 @@ class TheCatApiTest {
     }
 
     private void attachBreedInfoToReport(String fileContent) {
-        Allure.addAttachment("О кошачей породе", "text/plain",
+        Allure.addAttachment("О кошачьей породе", "text/plain",
                 new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)), ".txt");
     }
 }
