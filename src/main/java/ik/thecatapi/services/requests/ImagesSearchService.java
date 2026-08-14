@@ -1,7 +1,6 @@
 package ik.thecatapi.services.requests;
 
 import ik.thecatapi.controllers.requests.ImagesSearchRequestController;
-import ik.thecatapi.models.requests.breeds_search.ResponseBodyBreed;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequest;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchRequestQueryParams;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
@@ -33,12 +32,5 @@ public class ImagesSearchService extends AbstractService {
         return imagesSearchResponseBody.stream()
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Image was not found."));
-    }
-
-    @Step("Взять свойство Breed в объекте Image")
-    public ResponseBodyBreed getImageBreed(ResponseBodyImage image) {
-        return image.getBreeds().stream()
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Breed of Image was not found."));
     }
 }

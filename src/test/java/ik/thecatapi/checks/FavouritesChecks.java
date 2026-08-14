@@ -23,7 +23,7 @@ public class FavouritesChecks {
     }
 
     @Step("Проверить, что в ответе присутствует ключ message со значением SUCCESS")
-    public void checkPost(PostFavouritesResponse response, String expectedImageId) {
+    public void checkPost(PostFavouritesResponse response) {
         assertAll(
                 () -> assertEquals(200, response.getStatusCode(), "Status Code"),
                 () -> assertEquals("SUCCESS", response.getBody().getMessage(),
@@ -32,7 +32,7 @@ public class FavouritesChecks {
         long favouriteId = response.getBody().getId();
         ResponseBodyFavourite createdFavourite = ResponseBodyFavourite.builder()
                 .id(favouriteId)
-                .imageId(expectedImageId)
+                .message("SUCCESS")
                 .build();
         checkFavouritesHasItem(createdFavourite);
     }

@@ -16,5 +16,5 @@ import tools.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ResponseBodyFavourite {
     private long id;
-    private String imageId;
+    private String message;
 }

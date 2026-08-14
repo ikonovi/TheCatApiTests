@@ -1,9 +1,9 @@
 ### REST API Tests Automation Approach 
 
 #### Pre-requisites
-- Installed JDK 17
-- Installed Maven 3.8 or higher
-- Installed Allure commandline 2.17 or higher
+- Installed JDK 25
+- Installed Maven 3.9
+- Installed Allure commandline 2.35
 
 #### Running Tests
 1. Get API Key value on the web-site <https://thecatapi.com>

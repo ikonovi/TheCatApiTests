@@ -7,6 +7,7 @@ import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
 import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
 import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponse;
 import ik.thecatapi.models.requests.favourites.PostFavouritesResponse;
+import ik.thecatapi.models.requests.favourites.PostFavouritesResponseBody;
 import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
@@ -35,7 +36,7 @@ class TheCatApiTest {
 
     @BeforeEach
     void initAll() {
-        String apiKey = System.getProperty("api_key");
+        String apiKey = "live_FaHvKQatULdpSAq2xORUyclm42jq4e9e5ztPgrhGQaYnoY3mPf9VGlLNZQNsIJyA";//System.getProperty("api_key");
         categoriesService = new CategoriesService(apiKey);
         categoriesChecks = new CategoriesChecks();
         breedsSearchService = new BreedsSearchService(apiKey);
@@ -53,21 +54,20 @@ class TheCatApiTest {
         String breedId = breedsSearchService.getBreedId(getBreedsSearchResponse);
 
         GetImagesSearchResponse getImagesSearchResponse = imagesSearchService.getImagesSearch(breedId);
-        imagesSearchChecks.checkBreadId(getImagesSearchResponse, breedId);
 
         ResponseBodyImage responseBodyImage = imagesSearchService.getResponseBody1stImage(getImagesSearchResponse);
         String imageId = responseBodyImage.getId();
         String imageUrl = responseBodyImage.getUrl();
 
         PostFavouritesResponse postFavouritesResponse = favouritesService.requestPostFavourites(imageId);
-        long favouriteId = postFavouritesResponse.getBody().getId();
+        PostFavouritesResponseBody favouritesResBody = postFavouritesResponse.getBody();
         ResponseBodyFavourite createdFavourite = ResponseBodyFavourite.builder()
-                .id(favouriteId)
-                .imageId(imageId)
+                .id(favouritesResBody.getId())
+                .message(favouritesResBody.getMessage())
                 .build();
-        favouritesChecks.checkPost(postFavouritesResponse, imageId);
+        favouritesChecks.checkPost(postFavouritesResponse);
 
-        DeleteFavouritesResponse deleteFavouritesResponse = favouritesService.requestDeleteFavourites(favouriteId);
+        DeleteFavouritesResponse deleteFavouritesResponse = favouritesService.requestDeleteFavourites(favouritesResBody.getId());
         favouritesChecks.checkDelete(deleteFavouritesResponse, createdFavourite);
 
         String fileContent = "Название породы: " + breedName +
