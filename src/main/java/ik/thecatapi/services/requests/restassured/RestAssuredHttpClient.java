@@ -1,7 +1,9 @@
 package ik.thecatapi.services.requests.restassured;
 
 import ik.thecatapi.config.ApiProperties;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
+import io.qameta.allure.model.Parameter;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -24,7 +26,7 @@ public class RestAssuredHttpClient {
     }
 
     @Step("HTTP GET {uriPath}")
-    public Response get(String uriPath, Headers headers) {
+    public Response get(String uriPath, @Param(mode = Parameter.Mode.MASKED) Headers headers) {
         return given()
                 .spec(getReqSpec)
                 .headers(headers)
@@ -33,7 +35,7 @@ public class RestAssuredHttpClient {
     }
 
     @Step("HTTP GET {uriPath}")
-    public Response get(String uriPath, Map<String, ?> queryParams, Headers headers) {
+    public Response get(String uriPath, Map<String, ?> queryParams, @Param(mode = Parameter.Mode.MASKED) Headers headers) {
         return given()
                     .spec(getReqSpec)
                     .queryParams(queryParams)
@@ -43,7 +45,7 @@ public class RestAssuredHttpClient {
     }
 
     @Step("HTTP POST {uriPath}")
-    public Response post(String uriPath, Headers headers, Object body) {
+    public Response post(String uriPath, @Param(mode = Parameter.Mode.MASKED) Headers headers, Object body) {
         return given()
                     .spec(postReqSpec)
                     .headers(headers)
@@ -53,7 +55,7 @@ public class RestAssuredHttpClient {
     }
 
     @Step("HTTP DELETE {uriPath}")
-    public Response delete(String uriPath, Headers headers) {
+    public Response delete(String uriPath, @Param(mode = Parameter.Mode.MASKED) Headers headers) {
         return given()
                     .spec(deleteReqSpec)
                     .headers(headers)
