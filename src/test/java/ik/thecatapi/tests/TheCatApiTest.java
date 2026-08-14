@@ -9,7 +9,6 @@ import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
 import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponse;
 import ik.thecatapi.models.requests.favourites.PostFavouritesResponse;
 import ik.thecatapi.models.requests.favourites.PostFavouritesResponseBody;
-import ik.thecatapi.models.requests.favourites.ResponseBodyFavourite;
 import ik.thecatapi.models.requests.images_search.GetImagesSearchResponse;
 import ik.thecatapi.models.requests.images_search.ResponseBodyImage;
 import ik.thecatapi.services.requests.BreedsSearchService;
@@ -61,15 +60,12 @@ class TheCatApiTest {
         String imageUrl = responseBodyImage.getUrl();
 
         PostFavouritesResponse postFavouritesResponse = favouritesService.requestPostFavourites(imageId);
-        PostFavouritesResponseBody favouritesResBody = postFavouritesResponse.getBody();
-        ResponseBodyFavourite createdFavourite = ResponseBodyFavourite.builder()
-                .id(favouritesResBody.getId())
-                .message(favouritesResBody.getMessage())
-                .build();
+        PostFavouritesResponseBody postFavouritesResBody = postFavouritesResponse.getBody();
+
         favouritesChecks.checkPost(postFavouritesResponse);
 
-        DeleteFavouritesResponse deleteFavouritesResponse = favouritesService.requestDeleteFavourites(favouritesResBody.getId());
-        favouritesChecks.checkDelete(deleteFavouritesResponse, createdFavourite);
+        DeleteFavouritesResponse deleteFavouritesResponse = favouritesService.requestDeleteFavourites(postFavouritesResBody.getId());
+        favouritesChecks.checkDelete(deleteFavouritesResponse, postFavouritesResBody.getId());
 
         String fileContent = "Название породы: " + breedName +
                 "\nid породы: " + breedId +

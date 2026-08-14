@@ -10,7 +10,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class GetFavouritesResponse extends CommonResponse {
-    private List<ResponseBodyFavourite> body;
+    private List<GetResponseBodyFavourite> body;
 
     public GetFavouritesResponse(int statusCode) {
         super(statusCode);

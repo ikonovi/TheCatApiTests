@@ -21,7 +21,7 @@ public class FavouritesRequestController extends AbstractRequestController {
         Headers headers = new Headers(authHeader);
         Response restResponse = httpClient.get(EndpointUriPath.FAVOURITES.getValue(), queryParams, headers);
         GetFavouritesResponse response = new GetFavouritesResponse(restResponse.getStatusCode());
-        ResponseBodyFavourite[] bodyImages = restResponse.as(ResponseBodyFavourite[].class);
+        GetResponseBodyFavourite[] bodyImages = restResponse.as(GetResponseBodyFavourite[].class);
         response.setBody(Arrays.asList(bodyImages));
         log.info("{}", response);
         return response;

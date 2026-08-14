@@ -14,7 +14,6 @@ import tools.jackson.databind.annotation.JsonNaming;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ResponseBodyFavourite {
+public class GetResponseBodyFavourite {
     private long id;
-    private String message;
 }
