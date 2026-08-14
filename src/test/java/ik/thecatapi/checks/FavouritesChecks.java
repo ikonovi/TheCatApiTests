@@ -24,7 +24,10 @@ public class FavouritesChecks {
 
     @Step("Проверить, что в ответе присутствует ключ message со значением SUCCESS")
     public void checkPost(PostFavouritesResponse postRes) {
+        // JUnit assert
         assertEquals(200, postRes.getStatusCode(), "HTTP статус код");
+        // AssertJ assert
+        org.assertj.core.api.Assertions.assertThat(postRes.getStatusCode()).as("HTTP статус код").isEqualTo(200);
         assertAll("Тело ответа",
                 () -> assertEquals("SUCCESS", postRes.getBody().getMessage(),
                         "В ответе присутствует ключ message со значением SUCCESS"));
