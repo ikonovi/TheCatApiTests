@@ -15,7 +15,7 @@ public abstract class AbstractService {
     }
 
     private AuthorizationHeader  createAuthorizationHeader(String apiKey) {
-        final String AUTH_HEADER_NAME = TheCatApiConfiguration.getHttpAuthorizationHeaderName();
+        final String AUTH_HEADER_NAME = TheCatApiConfiguration.getAuthHeaderName();
         return AuthorizationHeader.builder()
                 .name(AUTH_HEADER_NAME)
                 .value(apiKey)

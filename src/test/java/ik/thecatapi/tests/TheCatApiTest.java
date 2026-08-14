@@ -3,6 +3,7 @@ package ik.thecatapi.tests;
 import ik.thecatapi.checks.CategoriesChecks;
 import ik.thecatapi.checks.FavouritesChecks;
 import ik.thecatapi.checks.ImagesSearchChecks;
+import ik.thecatapi.config.TheCatApiConfiguration;
 import ik.thecatapi.models.requests.breeds_search.GetBreedsSearchResponse;
 import ik.thecatapi.models.requests.categories.GetCategoriesResponse;
 import ik.thecatapi.models.requests.favourites.DeleteFavouritesResponse;
@@ -36,7 +37,7 @@ class TheCatApiTest {
 
     @BeforeEach
     void initAll() {
-        String apiKey = "live_FaHvKQatULdpSAq2xORUyclm42jq4e9e5ztPgrhGQaYnoY3mPf9VGlLNZQNsIJyA";//System.getProperty("api_key");
+        String apiKey = TheCatApiConfiguration.getAuthHeaderValue();
         categoriesService = new CategoriesService(apiKey);
         categoriesChecks = new CategoriesChecks();
         breedsSearchService = new BreedsSearchService(apiKey);

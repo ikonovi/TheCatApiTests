@@ -1,6 +1,7 @@
 package ik.thecatapi.config;
 
 import ik.thecatapi.utils.PropertyFileUtils;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -8,11 +9,16 @@ import java.util.Properties;
 
 @UtilityClass
 public class TheCatApiConfiguration {
+    @Getter
     private static String theCatApiBaseUri;
+    @Getter
     private static String theCatApiBasePath;
-    private static String httpAuthorizationHeaderName;
+    @Getter
+    private static String authHeaderName;
+    @Getter
+    private static String authHeaderValue;
 
-    private static final String PROPS_FILE = "env_config.properties";
+    private static final String PROPS_FILE = "api-config.properties";
 
     static {
         initProperties();
@@ -23,18 +29,11 @@ public class TheCatApiConfiguration {
         Properties props = PropertyFileUtils.getFromResources(PROPS_FILE);
         theCatApiBaseUri = props.getProperty("theCatApi.baseUri");
         theCatApiBasePath = props.getProperty("theCatApi.basePath");
-        httpAuthorizationHeaderName = props.getProperty("theCatApi.http.authorization.header.name");
+        authHeaderName = props.getProperty("theCatApi.http.authorization.header.name");
+        authHeaderValue = System.getenv("api_key");
+        if (authHeaderValue == null) {
+            throw new IllegalStateException("Environment variable " + authHeaderName +" is not set");
+        }
     }
 
-    public static String getTheCatApiBaseUri() {
-        return theCatApiBaseUri;
-    }
-
-    public static String getTheCatApiBasePath() {
-        return theCatApiBasePath;
-    }
-
-    public static String getHttpAuthorizationHeaderName() {
-        return httpAuthorizationHeaderName;
-    }
 }

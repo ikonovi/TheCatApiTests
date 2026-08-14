@@ -9,7 +9,8 @@
 1. Get API Key value on the web-site <https://thecatapi.com>
 2. Download the project zip file and unpack it into a selected directory
 3. For Windows, open Command Prompt and go to the root of the project - directory .\TheCatApiTests
-4. Run the command `mvn clean test -Dapi_key=<your_API_Key>`
+4. Set API Key as environment variable: `set api_key=your_key_here` on Windows or `export api_key=your_key_here` on macOS
+5. Run the command `mvn clean test`
 
 #### Create a Test Report
 5. Run the command `allure generate --clean --report-dir ./target/allure-report ./target/allure-results && allure open --host localhost --port 8899 ./target/allure-report`
