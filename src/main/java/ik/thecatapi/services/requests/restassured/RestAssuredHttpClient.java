@@ -1,6 +1,6 @@
 package ik.thecatapi.services.requests.restassured;
 
-import ik.thecatapi.config.TheCatApiConfiguration;
+import ik.thecatapi.config.ApiProperties;
 import io.qameta.allure.Step;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -16,8 +16,8 @@ public class RestAssuredHttpClient {
     private final RequestSpecification deleteReqSpec;
 
     public RestAssuredHttpClient() {
-        String baseUri = TheCatApiConfiguration.getTheCatApiBaseUri();
-        String basePath = TheCatApiConfiguration.getTheCatApiBasePath();
+        String baseUri = ApiProperties.getTheCatApiBaseUri();
+        String basePath = ApiProperties.getTheCatApiBasePath();
         this.getReqSpec = RequestSpecifications.getInstance().getGetRequestSpecification(baseUri, basePath);
         this.postReqSpec = RequestSpecifications.getInstance().getPostRequestSpecification(baseUri, basePath);
         this.deleteReqSpec = RequestSpecifications.getInstance().getDeleteRequestSpecification(baseUri, basePath);

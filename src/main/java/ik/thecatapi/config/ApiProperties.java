@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 import java.util.Properties;
 
 @UtilityClass
-public class TheCatApiConfiguration {
+public class ApiProperties {
     @Getter
     private static String theCatApiBaseUri;
     @Getter
