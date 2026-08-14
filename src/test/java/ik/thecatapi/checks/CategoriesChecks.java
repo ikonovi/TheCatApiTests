@@ -13,8 +13,8 @@ public class CategoriesChecks {
     public void checkCategoryName(GetCategoriesResponse response, String expectedName) {
         List<ResponseBodyCategory> categories = response.getBody();
         boolean anyMatch = categories.stream().anyMatch(category -> category.getName().equals(expectedName));
+        assertEquals(200, response.getStatusCode(), "HTTP Status Code");
         assertAll("Check category name",
-                () -> assertEquals(200, response.getStatusCode(), "Status Code"),
                 () -> assertTrue(anyMatch, "присутствует ключ \"name\" со значением " + expectedName)
         );
     }
